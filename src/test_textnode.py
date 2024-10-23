@@ -28,6 +28,10 @@ class TestTextNode(unittest.TestCase):
         node = TextNode("This is a text node", TextType.BOLD, "https://www.boot.dev/")
         self.assertEqual("TextNode(This is a text node, bold, https://www.boot.dev/)", repr(node))
 
+    def test_text_to_html_node(self):
+        node = TextNode("Try out Boot.dev today!", TextType.LINK, "https://www.boot.dev/")
+        self.assertEqual(node.text_node_to_html_node().to_html(), '<a href="https://www.boot.dev/">Try out Boot.dev today!</a>')
+
 
 if __name__ == "__main__":
     unittest.main()
