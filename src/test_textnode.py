@@ -20,8 +20,8 @@ class TestTextNode(unittest.TestCase):
         self.assertNotEqual(node, node2)
 
     def test_url_eq(self):
-        node = TextNode("This is a text node", TextType.NORMAL, "https://www.boot.dev/")
-        node2 = TextNode("This is a text node", TextType.NORMAL, "https://www.boot.dev/")
+        node = TextNode("This is a text node", TextType.TEXT, "https://www.boot.dev/")
+        node2 = TextNode("This is a text node", TextType.TEXT, "https://www.boot.dev/")
         self.assertEqual(node, node2)
         
     def test_repr(self):
