@@ -5,14 +5,18 @@ def split_nodes_delimiter(old_nodes, delimiter, text_type):
         for node in old_nodes:
             if node.text_type != "text":
                 nodes.append(node)
-            elif len(node.text.split(delimiter,3)) != 3:
+                continue
+            split = []
+            sections = node.text.split(delimiter)
+            if len(sections) % 2 == 0:
                  raise Exception("Invalid markdown syntax.")
-            else:
-                 split = node.text.split(delimiter, 3)
-                 new_node_one = TextNode(split[0], TextType.TEXT)
-                 new_node_two = TextNode(split[1], text_type)
-                 new_node_three = TextNode(split[2], TextType.TEXT)
-                 nodes.extend([new_node_one,new_node_two,new_node_three])
-
+            for i in range(len(sections)):
+                if sections[i] == "":
+                      continue
+                if i % 2 == 0:
+                      split.append(TextNode(sections[i], TextType.TEXT))
+                else:
+                     split.append(TextNode(sections[i], text_type))
+            nodes.extend(split)
             
         return nodes
