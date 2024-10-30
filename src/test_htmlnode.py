@@ -1,9 +1,12 @@
 import unittest
-
 from htmlnode import HTMLNode, LeafNode, ParentNode
 
 
 class TestTextNode(unittest.TestCase):
+
+    def test_to_html_nyi(self):
+        self.assertRaises(NotImplementedError, lambda: HTMLNode("p").to_html())
+
     def test_props_to_html(self):
         props = {"href": "https://www.google.com", "target": "_blank",}
         node = HTMLNode(props=props)
@@ -47,7 +50,24 @@ class TestTextNode(unittest.TestCase):
 
         self.assertEqual(node.to_html(), "<p><b>Bold text</b>Normal text<i>Italic text</i>Normal text</p>")
 
+    def test_nest_parentnode(self):
+        node = ParentNode(
+            "p",
+            [ParentNode("b", 
+                        [
+                            LeafNode("i", "Italic text"),
+                            LeafNode(None, "Normal text")
+                        ],
+                    )
+                ],
+            )
+        self.assertEqual(node.to_html(), "<p><b><i>Italic text</i>Normal text</b></p>")
 
+"""     def test_parentnode_no_child(self):
+        self.assertRaises(ValueError, lambda: ParentNode(tag="div").to_html())
+
+    def test_parentnode_no_tag(self):
+        self.assertRaises(ValueError, lambda: ParentNode(children=[LeafNode("p", "Paragaph text.")]).to_html()) """
 
 if __name__ == "__main__":
     unittest.main()
