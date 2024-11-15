@@ -27,13 +27,27 @@ class TestMarkdownHandler(unittest.TestCase):
         self.assertEqual(extract_markdown_links(text), [('Boot.dev', 'https://www.boot.dev/')])
 
     def test_split_img(self):
-        node = TextNode("This is text with a link ![to a random image](https://www.boot.dev/test.png) and [to youtube](https://www.youtube.com/@bootdotdev)", TextType.TEXT)
-        res = split_nodes_image([node])
-        print(res)
+        node = TextNode("This is text with ![a random image](https://www.boot.dev/test.png) and a link [to youtube](https://www.youtube.com/@bootdotdev)", TextType.TEXT)
+        self.assertEqual(split_nodes_image([node]), [TextNode('This is text with ', TextType.TEXT), TextNode('a random image', TextType.IMAGE, 'https://www.boot.dev/test.png'), TextNode(' and a link [to youtube](https://www.youtube.com/@bootdotdev)', TextType.TEXT)])
 
     def test_split_img_no_imgs(self):
         node = TextNode("This text has no images in it!", TextType.TEXT)
         self.assertEqual(split_nodes_image([node]), [TextNode('This text has no images in it!', TextType.TEXT, None)])
+
+    def test_split_multi_imgs(self):
+        node = TextNode("This text has ![multiple](img1.png) kinds of ![images](img2.png) in it.", TextType.TEXT)
+        self.assertEqual(split_nodes_image([node]), [TextNode('This text has ', TextType.TEXT), TextNode('multiple', TextType.IMAGE, 'img1.png'), TextNode(' kinds of ', TextType.TEXT), TextNode('images', TextType.IMAGE, 'img2.png'), TextNode(' in it.', TextType.TEXT)])
+
+    def test_split_link(self):
+        node = TextNode("This is text with ![a random image](test.png) and a link [to youtube](https://www.youtube.com/)", TextType.TEXT)
+        self.assertEqual(split_nodes_link([node]), [TextNode('This is text with ![a random image](test.png) and a link ', TextType.TEXT), TextNode('to youtube', TextType.LINK, 'https://www.youtube.com/')])
+
+    def test_split_link_no_links(self):
+        node = TextNode("This text has no links in it!", TextType.TEXT)
+        self.assertEqual(split_nodes_link([node]), [TextNode('This text has no links in it!', TextType.TEXT)])
+
+    def test_split_multi_links(self):
+        pass
 
 if __name__ == "__main__":
     unittest.main()
