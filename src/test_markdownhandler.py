@@ -27,8 +27,9 @@ class TestMarkdownHandler(unittest.TestCase):
         self.assertEqual(extract_markdown_links(text), [('Boot.dev', 'https://www.boot.dev/')])
 
     def test_split_img(self):
-        node = TextNode("This is text with a link ![to a random image](https://www.boot.dev/test.png) and ![to youtube](https://www.youtube.com/@bootdotdev)", TextType.TEXT)
-        split_nodes_image([node])
+        node = TextNode("This is text with a link ![to a random image](https://www.boot.dev/test.png) and [to youtube](https://www.youtube.com/@bootdotdev)", TextType.TEXT)
+        res = split_nodes_image([node])
+        print(res)
 
     def test_split_img_no_imgs(self):
         node = TextNode("This text has no images in it!", TextType.TEXT)

@@ -39,8 +39,10 @@ def split_nodes_image(old_nodes):
         for pair in extract:
             alt_txt = pair[0]
             img_url = pair[1]
-            sections = node.text.split(f"![{alt_txt}]({img_url})", 1)
-            print(sections)
+            sections = list(filter(None, node.text.split(f"![{alt_txt}]({img_url})", 1)))
+            split.append(TextNode(sections[0], TextType.TEXT))
+            split.append(TextNode(alt_txt, TextType.IMAGE, img_url))
+            sections = sections[1]
         nodes.extend(split)
     
     return nodes
