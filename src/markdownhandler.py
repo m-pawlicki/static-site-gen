@@ -40,14 +40,15 @@ def split_nodes_image(old_nodes):
         for pair in extract:
             alt_txt = pair[0]
             img_url = pair[1]
-            sections = list(filter(None, remaining_text.split(f"![{alt_txt}]({img_url})", 1)))
-            split.append(TextNode(sections[0], TextType.TEXT))
+            sections = remaining_text.split(f"![{alt_txt}]({img_url})", 1)
+            if sections[0] != "":
+                split.append(TextNode(sections[0], TextType.TEXT))
             split.append(TextNode(alt_txt, TextType.IMAGE, img_url))
-            if 1 < len(sections):
-                continue
-            else:
+            if len(sections) > 1:
                 remaining_text = sections[1]
-        split.append(TextNode(remaining_text, TextType.TEXT))
+        if len(sections) > 1:
+            if remaining_text != "":
+                split.append(TextNode(remaining_text, TextType.TEXT))
         nodes.extend(split)
     
     return nodes
@@ -72,13 +73,14 @@ def split_nodes_link(old_nodes):
             link_txt = pair[0]
             link_url = pair[1]
             sections = remaining_text.split(f"[{link_txt}]({link_url})", 1)
-            split.append(TextNode(sections[0], TextType.TEXT))
+            if sections[0] != "":
+                split.append(TextNode(sections[0], TextType.TEXT))
             split.append(TextNode(link_txt, TextType.LINK, link_url))
-            if 1 < len(sections):
-                continue
-            else:
+            if len(sections) > 1:
                 remaining_text = sections[1]
-        split.append(TextNode(remaining_text, TextType.TEXT))
+        if len(sections) > 1:
+            if remaining_text != "":
+                split.append(TextNode(remaining_text, TextType.TEXT))
         nodes.extend(split)
     
     return nodes
