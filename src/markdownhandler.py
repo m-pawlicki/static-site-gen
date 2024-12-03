@@ -84,3 +84,14 @@ def split_nodes_link(old_nodes):
         nodes.extend(split)
     
     return nodes
+
+def text_to_textnodes(text):
+    aggregate_nodes = []
+    old_nodes = [TextNode(text, TextType.TEXT)]
+    bold = split_nodes_delimiter(old_nodes, "**", TextType.BOLD)
+    italic = split_nodes_delimiter(bold, "*", TextType.ITALIC)
+    code = split_nodes_delimiter(italic, "`", TextType.CODE)
+    link = split_nodes_link(code)
+    img = split_nodes_image(link)
+    aggregate_nodes.extend(img)
+    return aggregate_nodes
