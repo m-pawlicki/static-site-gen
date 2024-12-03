@@ -50,7 +50,6 @@ class TestMarkdownHandler(unittest.TestCase):
         node = TextNode("This text has [multiple](https://www.boot.dev/) kinds of [links](https://www.youtube.com/) in it!", TextType.TEXT)
         self.assertEqual(split_nodes_link([node]), [TextNode('This text has ', TextType.TEXT), TextNode('multiple', TextType.LINK, 'https://www.boot.dev/'), TextNode(' kinds of ', TextType.TEXT), TextNode('links', TextType.LINK, 'https://www.youtube.com/'), TextNode(' in it!', TextType.TEXT)])
 
-<<<<<<< HEAD
     def test_split_just_img(self):
         node = TextNode("![This is a test.](test.png)", TextType.TEXT)
         self.assertEqual(split_nodes_image([node]), [TextNode("This is a test.", TextType.IMAGE, "test.png")])
@@ -63,7 +62,6 @@ class TestMarkdownHandler(unittest.TestCase):
         node = TextNode("How about a link at the end with [nothing after it?](https://lol.lmao)", TextType.TEXT)
         self.assertEqual(split_nodes_link([node]), [TextNode("How about a link at the end with ", TextType.TEXT), TextNode("nothing after it?", TextType.LINK, "https://lol.lmao")])
 
-=======
     def test_text_to_textnodes(self):
         text = "This is **text** with an *italic* word and a `code block` and an ![obi wan image](https://i.imgur.com/fJRm4Vk.jpeg) and a [link](https://boot.dev)"
         self.assertEqual(text_to_textnodes(text),
@@ -80,6 +78,5 @@ class TestMarkdownHandler(unittest.TestCase):
                              TextNode("link", TextType.LINK, "https://boot.dev"),
                              ])
         
->>>>>>> 824ce13 (Text to text node initial implementation)
 if __name__ == "__main__":
     unittest.main()
