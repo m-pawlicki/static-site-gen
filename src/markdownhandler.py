@@ -36,7 +36,8 @@ def split_nodes_image(old_nodes):
         extract = extract_markdown_images(node.text)
         remaining_text = node.text
         if len(extract) == 0:
-            return old_nodes
+            nodes.append(node)
+            continue
         for pair in extract:
             alt_txt = pair[0]
             img_url = pair[1]
@@ -68,7 +69,8 @@ def split_nodes_link(old_nodes):
         extract = extract_markdown_links(node.text)
         remaining_text = node.text
         if len(extract) == 0:
-            return old_nodes
+            nodes.append(node)
+            continue
         for pair in extract:
             link_txt = pair[0]
             link_url = pair[1]
