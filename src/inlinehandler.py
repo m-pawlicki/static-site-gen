@@ -97,12 +97,3 @@ def text_to_textnodes(text):
     img = split_nodes_image(link)
     aggregate_nodes.extend(img)
     return aggregate_nodes
-
-def markdown_to_block(markdown):
-    blocks = []
-    split_markdown = re.split('\n\n', markdown)
-    for part in split_markdown:
-        res = part.strip()
-        if res != "":
-            blocks.append(res)
-    return blocks
