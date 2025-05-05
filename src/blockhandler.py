@@ -21,7 +21,7 @@ def markdown_to_block(markdown):
 
 def block_to_block_type(block):
     heading = r"^#{1,6} .*$"
-    code = r"^```[\s\S]*```$"
+    code = r"```[\s\S]*?```"
     quote = r"^>.*$"
     unordered = r"^- .*$"
     ordered = r"^\d+\. .*$"

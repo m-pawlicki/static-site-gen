@@ -12,7 +12,7 @@ class TestInlineHandler(unittest.TestCase):
 
     def test_split_delimiter_not_text(self):
         node = TextNode("Italicized sentence!", TextType.ITALIC)
-        self.assertEqual(split_nodes_delimiter([node], "*", TextType.ITALIC), [TextNode('Italicized sentence!', TextType.ITALIC, None)])
+        self.assertEqual(split_nodes_delimiter([node], "_", TextType.ITALIC), [TextNode('Italicized sentence!', TextType.ITALIC, None)])
     
     def test_split_delimetir_broken_markup(self):
         node = TextNode("Sentence with `broken code markup.", TextType.TEXT)
@@ -63,7 +63,7 @@ class TestInlineHandler(unittest.TestCase):
         self.assertEqual(split_nodes_link([node]), [TextNode("How about a link at the end with ", TextType.TEXT), TextNode("nothing after it?", TextType.LINK, "https://lol.lmao")])
 
     def test_text_to_textnodes(self):
-        text = "This is **text** with an *italic* word and a `code block` and an ![obi wan image](https://i.imgur.com/fJRm4Vk.jpeg) and a [link](https://boot.dev)"
+        text = "This is **text** with an _italic_ word and a `code block` and an ![obi wan image](https://i.imgur.com/fJRm4Vk.jpeg) and a [link](https://boot.dev)"
         self.assertEqual(text_to_textnodes(text),
                          [
                              TextNode("This is ", TextType.TEXT),
