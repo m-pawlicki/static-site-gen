@@ -2,49 +2,78 @@ from textnode import *
 from htmlnode import *
 from blockhandler import *
 from inlinehandler import *
+import re
 
 def markdown_to_html_node(markdown):
+    block_nodes = []
     blocks = markdown_to_block(markdown)
+
     for block in blocks:
         match block_to_block_type(block):
             case BlockType.QUOTE:
-                quote_md_to_html(block)
+                node = quote_md_to_html(block)
             case BlockType.UO_LIST:
-                ul_md_to_html(block)
+                node = ul_md_to_html(block)
             case BlockType.O_LIST:
-                ol_md_to_html(block)
+                node = ol_md_to_html(block)
             case BlockType.CODE:
-                code_md_to_html(block)
+                node = code_md_to_html(block)
             case BlockType.HEAD:
-                head_md_to_html(block)
+                node = head_md_to_html(block)
             case _:
-                para_md_to_html(block)
+                node = para_md_to_html(block)
+        block_nodes.append(node)
 
-    #assign proper child htmlnodes to block -- text_to_children(text)
-    #parent html node <div> with children derived from above
-    pass
+    parent_node = ParentNode("div", block_nodes)
+    return parent_node
 
 def text_to_children(text):
-    html_nodes = []
+    child_nodes = []
     txt_nodes = text_to_textnodes(text)
+
     for node in txt_nodes:
-        html_nodes.append(node.text_node_to_html_node())
-    return html_nodes
+        html_node = node.text_node_to_html_node()
+        child_nodes.append(html_node)
+
+    return child_nodes
 
 def quote_md_to_html(md):
-    pass
+    lines = md.split("\n")
+    processed_lines = [line.lstrip(">").strip() for line in lines]
+    children = text_to_children("\n".join(processed_lines))
+    return HTMLNode("blockquote", None, children, None)
 
 def ul_md_to_html(md):
-    pass
+    lines = md.split("\n")
+    cleaned_lines = [line.lstrip("*-").strip() for line in lines]
+    processed_nodes = []
+    for line in cleaned_lines:
+        processed_nodes.append(ParentNode("li", text_to_children(line)))
+    return ParentNode("ul", processed_nodes)
 
 def ol_md_to_html(md):
-    pass
+    lines = md.split("\n")
+    cleaned_lines = [line.split(".", 1)[1].strip() for line in lines]
+    processed_nodes = []
+    for line in cleaned_lines:
+        processed_nodes.append(ParentNode("li", text_to_children(line)))
+    return ParentNode("ol", processed_nodes)
+    
+def code_md_to_html(md):
+    lines = md.split('\n')
+    content_lines = lines[1:-1]
+    stripped_lines = [line.lstrip() for line in content_lines]
+    content = '\n'.join(stripped_lines) + '\n'
+    inner_node = [LeafNode("code", content)]
+    return ParentNode("pre", inner_node)
 
-def code_md_to_html(self):
-    pass
+def head_md_to_html(md):
+    parts = md.split(" ", 1)
+    tag = "h" + str(parts[0])
+    children = text_to_children(parts[1])
+    return ParentNode(tag, children)
 
-def head_md_to_html(self):
-    pass
-
-def para_md_to_html(self):
-    pass
+def para_md_to_html(md):
+    strip = re.sub(r'\s+', ' ', md.strip())
+    children = text_to_children(strip)
+    return ParentNode("p", children)

@@ -2,6 +2,8 @@ import unittest
 from converter import *
 from htmlnode import *
 from textnode import *
+from inlinehandler import *
+from blockhandler import *
 
 class TestConverter(unittest.TestCase):
 
