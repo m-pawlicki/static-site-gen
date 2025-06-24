@@ -51,3 +51,16 @@ def generate_page(from_path, template_path, dest_path):
             f.write(html)
     except Exception as e:
         return f"Error: {e}"
+    
+def generate_pages_recursive(dir_path_content, template_path, dest_dir_path):
+    for item in os.listdir(dir_path_content):
+        content = os.path.join(dir_path_content, item)
+        if os.path.isfile(content):
+            file, ext = os.path.splitext(item)
+            if ext.lower() == ".md":
+                to_html = file+".html"
+                generate_page(content, template_path, os.path.join(dest_dir_path, to_html))
+        if os.path.isdir(content):
+            new_dest_dir = os.path.join(dest_dir_path, item)
+            os.makedirs(new_dest_dir, exist_ok=True)
+            generate_pages_recursive(content, template_path, new_dest_dir)
