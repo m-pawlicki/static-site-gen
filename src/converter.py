@@ -41,7 +41,7 @@ def quote_md_to_html(md):
     lines = md.split("\n")
     processed_lines = [line.lstrip(">").strip() for line in lines]
     children = text_to_children("\n".join(processed_lines))
-    return HTMLNode("blockquote", None, children, None)
+    return ParentNode("blockquote", children)
 
 def ul_md_to_html(md):
     lines = md.split("\n")
@@ -69,7 +69,7 @@ def code_md_to_html(md):
 
 def head_md_to_html(md):
     parts = md.split(" ", 1)
-    tag = "h" + str(parts[0])
+    tag = "h" + str(len(parts[0]))
     children = text_to_children(parts[1])
     return ParentNode(tag, children)
 
